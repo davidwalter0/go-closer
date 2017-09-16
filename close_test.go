@@ -24,8 +24,15 @@ func TestCloser(t *testing.T) {
 		_ = syscall.Kill(syscall.Getpid(), syscall.SIGINT)
 	}
 
+	// select {
+	// case <-time.After(time.Second):
+	// 	_ = syscall.Kill(syscall.Getpid(), syscall.SIGTERM)
+	// }
+
 	select {
 	case <-done:
+	case <-time.After(2 * time.Second):
+		_ = syscall.Kill(syscall.Getpid(), syscall.SIGTERM)
 	}
 
 	if wanted != got {
